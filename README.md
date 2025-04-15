@@ -6,11 +6,11 @@ The tool has been enhanced to ensure that each endpoint is marked “UP” only 
 Additionally, availability is aggregated by domain (ignoring port numbers) and reported as an integer percentage (with decimals dropped).
 
 ## Table of Contents
-• Installation
-• Usage
-• Configuration
-• Identified Issues and Improvements
-• License
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Identified Issues and Improvements](#identified-issues-and-improvements)
+
 
 ## Installation
 
@@ -86,40 +86,40 @@ To stop the tool, press Ctrl+C.
 ## Configuration
 
 The YAML configuration file must be a list of endpoint definitions, each including:
-• name: A descriptive label for the endpoint.
-• url: The HTTP or HTTPS URL of the endpoint.
-• method: (Optional) The HTTP method; defaults to GET if omitted.
-• headers: (Optional) A dictionary of HTTP headers.
-• body: (Optional) A JSON-encoded string for endpoints that require a request body (e.g., for POST).
+- name: A descriptive label for the endpoint.
+- url: The HTTP or HTTPS URL of the endpoint.
+-  method: (Optional) The HTTP method; defaults to GET if omitted.
+-  headers: (Optional) A dictionary of HTTP headers.
+-  body: (Optional) A JSON-encoded string for endpoints that require a request body (e.g., for POST).
 
 ## Identified Issues and Improvements
 
 ### 1. Response Time Validation
-• Issue:
+- Issue:
 The original code did not verify that an endpoint responded within 500 milliseconds.
-• Improvement:
+- Improvement:
 Updated logic measures the response time and marks an endpoint as “UP” only if it responds within 500ms in addition to having a valid HTTP status.
 
 ### 2. Domain Extraction – Ignoring Port Numbers
-• Issue:
+- Issue:
 The domain was extracted using simple string splits, potentially including the port number (e.g., example.com:8080), which could lead to separate entries for the same domain.
-• Improvement:
+- Improvement:
 The code now extracts the hostname using proper URL parsing, ensuring that only the base domain is used for cumulative statistics.
 
 ### 3. Cycle Timing Accuracy
-• Issue:
+- Issue:
 The original code unconditionally slept for 15 seconds without accounting for the time taken by health checks, which could make cycles longer than intended.
-• Improvement:
+- Improvement:
 The sleep time is dynamically adjusted based on the elapsed time in each cycle to ensure that a new cycle starts every 15 seconds.
 
 ### 4. Availability Reporting – Dropping Decimal Values
-• Issue:
+-  Issue:
 Availability percentages were rounded, which might include unwanted decimal values.
-• Improvement:
+-  Improvement:
 The calculation now drops the decimal portion and reports the availability as a whole number (e.g., 85%).
 
 ### 5. Robust Error Handling and Logging
-• Issue:
+-  Issue:
 The original implementation had limited error handling and logging, making it harder to diagnose issues.
-• Improvement:
+-  Improvement:
 Enhanced logging and error handling have been added for URL parsing failures and HTTP request errors, improving the tool’s reliability and debuggability.
